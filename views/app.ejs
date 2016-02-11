@@ -1,0 +1,22 @@
+<div ng-app="sxspeech" ng-controller="AppCtrl" id="container" ng-cloak>
+
+  <!-- Notification Bus -->
+  <%- partial ('partials/notification-bus.ejs') %>
+
+  <!-- Header Toolbar -->
+  <%- partial ('partials/header.ejs') %>
+
+  <div layout="row" class="body-wrap" flex>
+
+    <!-- Sidenav - Links -->
+    <%- partial ('partials/sidenav-links.ejs') %>
+
+    <!-- Core Dynamic Content -->
+    <%- partial('partials/content.ejs') %>
+
+    <!-- Sidenav - Accounts -->
+    <%- partial ('partials/sidenav-account.ejs') %>
+
+  </div>
+
+</div>

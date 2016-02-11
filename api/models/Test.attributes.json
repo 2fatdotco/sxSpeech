@@ -1,0 +1,1 @@
+{"attributes":{"myString":{"type":"string","unique":false,"required":true},"myNumber":{"type":"float","unique":false,"required":true}},"globalId":"Test","identity":"test"}
