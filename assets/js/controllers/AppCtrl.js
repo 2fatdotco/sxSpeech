@@ -48,14 +48,11 @@ function($scope, $rootScope, $state, $q, $mdSidenav, $mdTheming, uiMe, uiList, u
   uiMe.fetch()
   .then(function loggedIn(){
 
-    // Fetch widgets from server
-    // uiList.fetch({
-    //   belongingTo: uiMe.id
-    // });
+    
 
   }).catch(function notLoggedIn(err){
 
-    //appReady.reject(err);
+    $state.go('login');
 
   })
   .finally(function eitherWay(){

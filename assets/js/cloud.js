@@ -20,8 +20,10 @@ angular.module('cloudsdk').endpoints({
   // is probably better suited elsewhere in your UI code (likely a ui-model).  However, if you're still
   // interested, see implementation in assets/js/dependencies/cloudsdk.js for details.
 
+  // Cool app routes
+  count: 'POST /count/:percent',
 
-  // Me (current user)
+  // Boring account routes
   login: 'POST /login',
   logout: 'POST /logout',
   signup: 'POST /user',
@@ -33,11 +35,5 @@ angular.module('cloudsdk').endpoints({
   facebookAuth: 'GET /user/facebook',
   integrateFacebook: 'POST /integration/facebook',
   getIntegration: 'GET /integration/user'
-
-  // Items
-  // listItems: 'GET /item',
-  // createItem: 'POST /item',
-  // updateItem: 'PUT /item/:id',
-  // destroyItem: 'DELETE /item/:id',
 
 });

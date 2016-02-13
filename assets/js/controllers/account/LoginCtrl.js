@@ -38,7 +38,7 @@ function($scope, $rootScope, $state, $timeout, uiMe , uiList, uiErrorBus) {
       uiMe.syncing.form = true;
       uiMe.login($scope.user)
       .then(function onLogin(){
-        $state.go('profile');
+        $state.go('dashboard');
       })
       .catch(function onError(err){
         if(err.status >= 400 && err.status < 500){

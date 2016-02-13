@@ -13,11 +13,14 @@ angular.module('sxspeech')
     * Configure state machine
     *******************************/
 
-    .state('home', {
-      url: '/',
-      templateUrl: 'templates/brochure/home.html',
-      controller: 'HomeCtrl'
+    // Cool app stuff
+    .state('dashboard', {
+      url: '/dashboard',
+      templateUrl: 'templates/dashboard.html',
+      controller: 'DashboardCtrl'
     })
+
+    // Boring account stuff
     .state('login', {
       url: '/login',
       templateUrl: 'templates/account/login.html',
@@ -50,7 +53,7 @@ angular.module('sxspeech')
 
     $urlRouterProvider
 
-    .otherwise('/');
+    .otherwise('/login');
   }
 ]);
 

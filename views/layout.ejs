@@ -37,9 +37,12 @@
   </head>
 
   <body>
-    <%- body %>
 
+    <div ng-app="sxspeech" ng-controller="AppCtrl" id="container" ng-cloak>
 
+      <%- body %>
+
+    </div>
 
     <!--
         Client-side Templates
@@ -99,6 +102,8 @@
     <script src="/bower_components/angular-ui-router/release/angular-ui-router.js"></script>
     <script src="/bower_components/lodash/lodash.js"></script>
     <script src="/bower_components/svg-morpheus/compile/unminified/svg-morpheus.js"></script>
+    <script src="/bower_components/Chart.js/Chart.js"></script>
+    <script src="/bower_components/angular-chart.js/dist/angular-chart.js"></script>
     <script src="/js/dependencies/other/cloudsdk.js"></script>
     <script src="/js/dependencies/other/sails.io.js"></script>
     <script src="/js/unicorn.module.js"></script>
@@ -106,6 +111,8 @@
     <script src="/js/ui-models/uiArray.array.js"></script>
     <script src="/js/ui-models/uiObject.object.js"></script>
     <script src="/js/controllers/AppCtrl.js"></script>
+    <script src="/js/controllers/CountCtrl.js"></script>
+    <script src="/js/controllers/DashboardCtrl.js"></script>
     <script src="/js/controllers/account/ForgotCtrl.js"></script>
     <script src="/js/controllers/account/HomeCtrl.js"></script>
     <script src="/js/controllers/account/IntegrationCtrl.js"></script>

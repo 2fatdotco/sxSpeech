@@ -17,6 +17,7 @@
 var cssFilesToInject = [
   'bower_components/angular-material/angular-material.css',
   'bower_components/angular-material-icons/angular-material-icons.css',
+  'bower_components/angular-chart.js/angular-chart.js/dist/angular-chart.css',
   'styles/**/*.css'
 ];
 
@@ -39,6 +40,8 @@ var jsFilesToInject = [
   'bower_components/angular-ui-router/release/angular-ui-router.js',
   'bower_components/lodash/lodash.js',
   'bower_components/svg-morpheus/compile/unminified/svg-morpheus.js',
+  'bower_components/Chart.js/Chart.js',
+  'bower_components/angular-chart.js/dist/angular-chart.js',
 
   // All other dependencies loaded here
   'js/dependencies/**/*.js',
