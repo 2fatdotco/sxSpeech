@@ -8,7 +8,8 @@ var dependencies = [
   'ngMaterial',
   'ngMdIcons',
   'cloudsdk',
-  'lodash'
+  'lodash',
+  'chart.js'
 ];
 
 /**

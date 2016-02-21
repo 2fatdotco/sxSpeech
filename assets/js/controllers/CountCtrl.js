@@ -19,8 +19,13 @@ function($scope, $rootScope, uiErrorBus) {
   // When the controller is initially rendered
   //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
 
-  $scope.labels = ["Download Sales", "In-Store Sales", "Mail-Order Sales"];
-  $scope.data = [300, 500, 100];
+  $scope.labels = ["Unsaid", "Said"];
+  $scope.data = [140, 0];
+  $scope.options = {
+    segmentShowStroke: false,
+    animationEasing: "easeOut",
+    showTooltips: false
+  }
 
   //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
   // DOM Events
