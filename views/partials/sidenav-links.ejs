@@ -1,5 +1,5 @@
 <!-- Global Side Nav - Links -->
-<md-sidenav md-component-id="links" md-is-locked-open="$mdMedia('gt-md')" layout="column" layout-padding id="sidenav-links" class="md-sidenav-left md-whiteframe-z1">
+<md-sidenav md-component-id="links" md-is-locked-open="$mdMedia('gt-md')" layout="column" layout-padding id="sidenav-links" class="md-sidenav-left md-whiteframe-z1" ng-hide="countActive">
 
   <span class="logo" show-gt-md>
     <a ui-sref="home">
@@ -8,6 +8,7 @@
   </span>
 
   <md-button class="md-accent nav-link" ui-sref="dashboard" ng-if="uiMe.id">Dashboard</md-button>
+  <md-button class="md-accent nav-link" ui-sref="count" ng-if="uiMe.id">Counter</md-button>
   <md-button class="md-accent nav-link" ui-sref="profile" ng-if="uiMe.id">Profile</md-button>
   <md-button class="md-accent nav-link" ng-click="uiMe.logout()" ng-if="uiMe.id">Logout</md-button>
   <md-button class="md-accent nav-link" ui-sref="login" ng-if="!uiMe.id">Login</md-button>

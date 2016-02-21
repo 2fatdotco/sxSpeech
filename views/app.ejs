@@ -6,7 +6,7 @@
   <!-- Header Toolbar -->
   <%- partial ('partials/header.ejs') %>
 
-  <div layout="row" class="body-wrap" flex>
+  <div layout="row" class="body-wrap" flex ng-class="{'layout-count': countActive}">
 
     <!-- Sidenav - Links -->
     <%- partial ('partials/sidenav-links.ejs') %>

@@ -19,6 +19,11 @@ angular.module('sxspeech')
       templateUrl: 'templates/dashboard.html',
       controller: 'DashboardCtrl'
     })
+    .state('count', {
+      url: '/count',
+      templateUrl: 'templates/count.html',
+      controller: 'CountCtrl'
+    })
 
     // Boring account stuff
     .state('login', {

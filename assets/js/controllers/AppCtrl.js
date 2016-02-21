@@ -65,6 +65,12 @@ function($scope, $rootScope, $state, $q, $mdSidenav, $mdTheming, uiMe, uiList, u
 
   $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
     $scope.intent.closeSidenav();
+    if(toState.name === 'count'){
+      $scope.countActive = true;
+    }
+    else{
+      $scope.countActive = false;
+    }
   });
 
   $scope.intent = angular.extend($scope.intent||{}, {
