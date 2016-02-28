@@ -24,12 +24,22 @@ var dependencies = [
 angular.module('sxspeech', dependencies)
 
 // Config angular material design
-.config(function($mdThemingProvider, $locationProvider) {
+.config(function($mdThemingProvider, $locationProvider, ChartJsProvider) {
 
   $mdThemingProvider.theme('default')
   .primaryPalette('blue-grey')
   .accentPalette('orange')
   .warnPalette('red')
   .backgroundPalette('grey');
+
+  // Configure all charts
+  ChartJsProvider.setOptions({
+    colours: ['#ff6900', '#3b3b3b']
+  });
+
+  // Configure all doughnut charts
+  // ChartJsProvider.setOptions('Doughnut', {
+  //   animateScale: true
+  // });
 
 });
