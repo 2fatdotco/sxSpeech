@@ -1,7 +1,9 @@
 <div id="count" layout-padding>
 
+	<h1 id="display" ng-class="{'visible': listening, 'flash': data[0] == 140}">{{ data[0] }}</h1>
+
 	<canvas id="doughnut" class="chart chart-doughnut"
-	  chart-data="data" chart-labels="labels" chart-options="options">
-	</canvas> 
+	  chart-data="data" chart-labels="labels" chart-options="options" chart-colours="">
+	</canvas>
 
 </div>
