@@ -45,6 +45,6 @@
     "type": "git",
     "url": "git://github.com/luke/sxspeech-treeline.git"
   },
-  "author": "Luke Heath",
+  "author": "Luke Heath and Nick Crumrine",
   "license": "MIT"
 }

@@ -1,3 +1,5 @@
+var bcrypt = require('bcryptjs');
+
 /**
  * Bootstrap
  * (sails.config.bootstrap)
@@ -11,7 +13,49 @@
 
 module.exports.bootstrap = function(cb) {
 
-  // It's very important to trigger this callback method when you are finished
-  // with the bootstrap!  (otherwise your server will never lift, since it's waiting on the bootstrap)
-  cb();
+	// If there isn't an admin user in the database, make one.
+
+	sails.after('hook:orm:loaded', function() {
+		User
+		.find()
+		.limit(1)
+		.exec(function(err,users){
+			if (err){
+				sails.log(err);
+				return cb();
+			}
+
+			if (!users.length){
+
+				var createThisUser = {
+					email: process&&process.env&&process.env['DEFAULT_ADMIN_EMAIL'] || 'admin@2fat.co',
+					username: process&&process.env&&process.env['DEFAULT_ADMIN_USERNAME'] || 'admin',
+					avatarUrl: 'http://l-userpic.livejournal.com/89005287/9857739'
+				};
+
+				bcrypt.genSalt(12, function(err, salt) {
+
+					bcrypt.hash(process&&process.env&&process.env['DEFAULT_ADMIN_PASS'] || 'superGoodPassword', salt, function(err, hash) {
+						if (err){
+							return err;						
+						}
+
+						createThisUser.password = hash;
+
+						User
+						.create(createThisUser)
+						.exec(function(err,user){
+							if (err){
+								sails.log(err);
+							}
+							return cb();
+						});
+					});
+				});
+			}
+			else {
+				return cb();
+			}
+		});
+	});
 };
