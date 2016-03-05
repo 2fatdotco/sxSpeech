@@ -12,8 +12,8 @@
 
 angular.module('sxspeech')
 .controller('AppCtrl', [
-        '$scope', '$rootScope', '$state', '$q', '$mdSidenav', '$mdTheming', 'uiMe', 'uiList', 'uiErrorBus',
-function($scope, $rootScope, $state, $q, $mdSidenav, $mdTheming, uiMe, uiList, uiErrorBus) {
+        '$scope', '$rootScope', '$state', '$q', '$mdSidenav', '$mdTheming', '$timeout', 'uiMe', 'uiList', 'uiErrorBus',
+function($scope, $rootScope, $state, $q, $mdSidenav, $mdTheming, $timeout, uiMe, uiList, uiErrorBus) {
 
   window.ui = {
     me: uiMe,
@@ -46,20 +46,22 @@ function($scope, $rootScope, $state, $q, $mdSidenav, $mdTheming, uiMe, uiList, u
     uiMe.syncing.app = false;
   });
 
+  appReady.resolve();
+
   // Fetch current user data from server
-  uiMe.fetch()
-  .then(function loggedIn(){
+  // uiMe.fetch()
+  // .then(function loggedIn(){
 
     
 
-  }).catch(function notLoggedIn(err){
+  // }).catch(function notLoggedIn(err){
 
-    //$state.go('login');
+  //   $state.go('login');
 
-  })
-  .finally(function eitherWay(){
-    appReady.resolve();
-  });
+  // })
+  // .finally(function eitherWay(){
+  //   appReady.resolve();
+  // });
 
   //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
   // DOM Events

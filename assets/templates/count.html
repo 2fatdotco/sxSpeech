@@ -2,8 +2,10 @@
 
 	<h1 id="display" ng-class="{'visible': listening, 'flash': data[0] == 140}">{{ data[0] }}</h1>
 
+	<h2 id="quote">{{ finalTranscript }}</h1>
+
 	<canvas id="doughnut" class="chart chart-doughnut"
-	  chart-data="data" chart-labels="labels" chart-options="options" chart-colours="">
+	  chart-data="data" chart-labels="labels" chart-options="options">
 	</canvas>
 
 </div>

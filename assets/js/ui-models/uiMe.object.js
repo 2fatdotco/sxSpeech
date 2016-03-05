@@ -11,7 +11,7 @@ function( Cloud, uiErrorBus ) {
   return {
 
     syncing: {
-      app: true,
+      app: false,
       form: false
     },
     integration: {},

@@ -11,9 +11,13 @@
  */
 
 angular.module('sxspeech')
-.controller('CountCtrl', [
-        '$scope', '$rootScope', '$interval', 'Cloud', 'uiErrorBus',
-function($scope, $rootScope, $interval, Cloud, uiErrorBus) {
+.controller('CountCtrl',
+function($scope, $rootScope, $interval, $timeout, Cloud, uiErrorBus) {
+
+  // Define controller variables
+  var final_transcript = '';
+  var interim_transcript = '';
+  var confidenceThreshold = 0.7;
 
   // Set scope
   $scope.labels = ["Said", "Unsaid"];
@@ -22,19 +26,18 @@ function($scope, $rootScope, $interval, Cloud, uiErrorBus) {
     segmentShowStroke: false,
     animationEasing: "easeOut",
     animateRotate : false,
+    animateScale: false,
     showTooltips: false
   }
 
   $scope.listening = false;
 
-  // Define controller variables
-  var final_transcript = '';
-  var interim_transcript = '';
+  // Set count to scope
   $scope.finalCount = 0;
   $scope.interimCount = 0;
   $scope.totalCount = 0;
 
-  // Watch final count,
+  // Watch total count,
   // hit API when it changes
   $scope.$watch('totalCount', function(currentCount){
     if (currentCount){
@@ -47,7 +50,7 @@ function($scope, $rootScope, $interval, Cloud, uiErrorBus) {
   var secretWord = getUrlVars()["secret"];
 
   if(!secretWord){
-    var secretWord = 'seagull';
+    var secretWord = 'hibiscus';
   }
 
   // Create Web Speech API webkit recognition object
@@ -56,19 +59,29 @@ function($scope, $rootScope, $interval, Cloud, uiErrorBus) {
   // Set recognition object default properties
   recognition.continuous = true;
   recognition.interimResults = true;
-  // Accents will be less accurate
   recognition.lang = 'en-US';
 
   // On recording start event
   recognition.onstart = function() {
+    console.log("Speech started...");
+  }
 
+  recognition.onend = function(){
+    console.log("Speech stopped...");
+  }
+
+  // Recording error
+  recognition.onerror = function(err) {
+    console.log("Speech error: ", err);
   }
 
   // On result event
   // process the audio input
   recognition.onresult = function(event) {
 
-    // If no longer $scope.listening, 
+    console.log("Speech result with listening set to ", $scope.listening, '. Event: ', event);
+
+    // If not $scope.listening, 
     // return without processing
     if(!$scope.listening) return;
 
@@ -76,18 +89,19 @@ function($scope, $rootScope, $interval, Cloud, uiErrorBus) {
     // Transcription
     ////
 
-    // Interim transcript for immediate results, but not as accurate
-    var interim_transcript = '';
-
     // Iterate through the array of results 
     // and build transcript strings
     for (var i = event.resultIndex; i < event.results.length; ++i) {
       if (event.results[i].isFinal) {
         final_transcript += event.results[i][0].transcript.toLowerCase();
+
+        // Received final, reset interim
         $scope.interimCount = 0;
+        interim_transcript = '';
+        $scope.interimTranscript = '';
       }
       else{
-        if(event.results[i][0].confidence > 0.7){
+        if(event.results[i][0].confidence > confidenceThreshold){
           interim_transcript = event.results[i][0].transcript.toLowerCase();
         }
       }
@@ -95,37 +109,30 @@ function($scope, $rootScope, $interval, Cloud, uiErrorBus) {
 
     // If this is a final transcription
     if(final_transcript.length > 0){
-      
-      // Detect the secret word
-      // to reset the counter
-      if(final_transcript.indexOf(secretWord) > 0){
-        resetCounter();
-        return;
-      }
 
       // Populate the final count with the final string length
       $scope.finalCount = final_transcript.length;
     }
 
-    // If there is an interim transcription
+    // Else if this is an interim transcription
     if(interim_transcript.length > 0){
       // Populate the interim counter with the interim string length
       $scope.interimCount = interim_transcript.length;
+    }
 
-      // Detect the secret word
-      // to reset the counter
-      if(final_transcript.indexOf(secretWord) > 0){
-        resetCounter();
-        return;
-      }
+    // Detect the secret word
+    // to reset the counter
+    if(final_transcript.indexOf(secretWord) > 0){
+      resetCounter();
+      return;
     }
 
     // Total count is combined final & interim
     // for immediate results
     $scope.totalCount = ($scope.interimCount + $scope.finalCount);
 
-    // If we're above 130, don't use interimCount
-    // if($scope.totalCount > 130){
+    // If we're above 120, don't use interimCount
+    // if($scope.totalCount > 120){
     //   $scope.totalCount = $scope.finalCount;
     // }
 
@@ -145,32 +152,27 @@ function($scope, $rootScope, $interval, Cloud, uiErrorBus) {
       }
 
       // Set the final transcription to scope
-      $scope.finalTranscript = '<span class="quote">&ldquo;</span>' + finalText.trim() + '<span class="quote">&rdquo;</quote>';
+      $scope.finalTranscript = finalText.trim();
     }
 
     // We never want more than 140, 
     // because that's the range of the chart
-    if($scope.totalCount > 140){
+    if($scope.totalCount >= 140){
       $scope.totalCount = 140;
+      $scope.listening = false;
     }
 
-    if($scope.listening){
-      $scope.$apply(function(){
-        // Apply the total count
-        $scope.data[0] = $scope.totalCount;
-        $scope.data[1] = (140 - $scope.totalCount);
-      });
-    }
-  }
-
-  // On error callback
-  recognition.onerror = function(event) {
-    console.log("Error: ", event);
+    $scope.$apply(function(){
+      // Apply the total count
+      $scope.data[0] = $scope.totalCount;
+      $scope.data[1] = (140 - $scope.totalCount);
+    });
   }
 
   // Start recoginition object
   function startListening(event) {
-    resetCounter();
+    console.log("Start listening...");
+    //resetCounter();
     recognition.start();
     
     $scope.$apply(function(){
@@ -181,6 +183,7 @@ function($scope, $rootScope, $interval, Cloud, uiErrorBus) {
   // Stop recognition object
   // and reset counter
   function stopListening(event) {
+    console.log("Stop listening...");
     recognition.stop();
     resetCounter();
 
@@ -192,19 +195,19 @@ function($scope, $rootScope, $interval, Cloud, uiErrorBus) {
   // Reset the counter
   function resetCounter(){
   
+    // Reset counters
+    $scope.finalCount = 0;
+    $scope.interimCount = 0;
+    $scope.totalCount = 0;
+
+    // Clear the transcriptions
+    $scope.interimTranscript = '';
+    $scope.finalTranscript = '';
+    interim_transcript = '';
+    final_transcript = '';
 
     // Apply changes to scope
     $scope.$apply(function(){
-
-      // Reset counters
-      $scope.finalCount = 0;
-      $scope.interimCount = 0;
-      $scope.totalCount = 0;
-
-      // Clear the transcriptions
-      $scope.interimTranscript = '';
-      $scope.finalTranscript = '';
-
       $scope.data[0] = 0;
       $scope.data[1] = 140;
     });
@@ -243,9 +246,11 @@ function($scope, $rootScope, $interval, Cloud, uiErrorBus) {
   });
 
   shortcut.add("Ctrl+3",function() {
+    var changeAmount = 10;
+
     $scope.$apply(function(){
-      $scope.data[0] = 140;
-      $scope.data[1] = 0;
+      $scope.data[0] -= changeAmount;
+      $scope.data[1] += changeAmount;
     })
   },{
     'type':'keydown',
@@ -253,4 +258,16 @@ function($scope, $rootScope, $interval, Cloud, uiErrorBus) {
     'target':document
   });
 
-}]);
+  shortcut.add("Ctrl+4",function() {
+    var changeAmount = 10;
+    $scope.$apply(function(){
+      $scope.data[0] += changeAmount;
+      $scope.data[1] -= changeAmount;
+    })
+  },{
+    'type':'keydown',
+    'propagate':true,
+    'target':document
+  });
+
+});
