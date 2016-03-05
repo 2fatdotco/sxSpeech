@@ -15,10 +15,12 @@ angular.module('sxspeech')
         '$scope', '$rootScope', '$state', '$q', '$mdSidenav', '$mdTheming', 'uiMe', 'uiList', 'uiErrorBus',
 function($scope, $rootScope, $state, $q, $mdSidenav, $mdTheming, uiMe, uiList, uiErrorBus) {
 
-  window.uiMe = uiMe;
-  $scope.uiMe = uiMe;
+  window.ui = {
+    me: uiMe,
+    theme: $mdTheming
+  }
 
-  window.theme = $mdTheming;
+  $scope.uiMe = uiMe;
 
   //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
   // When the application is initially rendered
@@ -52,7 +54,7 @@ function($scope, $rootScope, $state, $q, $mdSidenav, $mdTheming, uiMe, uiList, u
 
   }).catch(function notLoggedIn(err){
 
-    $state.go('login');
+    //$state.go('login');
 
   })
   .finally(function eitherWay(){

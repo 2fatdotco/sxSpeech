@@ -38,6 +38,7 @@ function($scope, $rootScope, $interval, Cloud, uiErrorBus) {
   // hit API when it changes
   $scope.$watch('totalCount', function(currentCount){
     if (currentCount){
+      console.log("Count: ", currentCount);
       Cloud.count({count: currentCount});    
     }
   });
@@ -123,10 +124,15 @@ function($scope, $rootScope, $interval, Cloud, uiErrorBus) {
     // for immediate results
     $scope.totalCount = ($scope.interimCount + $scope.finalCount);
 
+    // If we're above 130, don't use interimCount
+    // if($scope.totalCount > 130){
+    //   $scope.totalCount = $scope.finalCount;
+    // }
+
     // Set interim transcript to scope
     $scope.interimTranscript = interim_transcript;
 
-    if($scope.totalCount <= 140){
+    if($scope.totalCount < 140){
 
       var finalText = final_transcript.trim();
 
@@ -185,21 +191,26 @@ function($scope, $rootScope, $interval, Cloud, uiErrorBus) {
 
   // Reset the counter
   function resetCounter(){
-    
-    // Reset counters
-    $scope.finalCount = 0;
-    $scope.interimCount = 0;
-    $scope.totalCount = 0;
-
-    // Clear the transcriptions
-    $scope.interimTranscript = '';
-    $scope.finalTranscript = '';
+  
 
     // Apply changes to scope
     $scope.$apply(function(){
+
+      // Reset counters
+      $scope.finalCount = 0;
+      $scope.interimCount = 0;
+      $scope.totalCount = 0;
+
+      // Clear the transcriptions
+      $scope.interimTranscript = '';
+      $scope.finalTranscript = '';
+
       $scope.data[0] = 0;
       $scope.data[1] = 140;
     });
+
+    // Reset the count on API
+    Cloud.count({count: -1});  
   };
 
   // Helper function to retrieve URL params
