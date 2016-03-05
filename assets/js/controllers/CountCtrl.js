@@ -246,24 +246,9 @@ function($scope, $rootScope, $interval, $timeout, Cloud, uiErrorBus) {
   });
 
   shortcut.add("Ctrl+3",function() {
-    var changeAmount = 10;
+    
+    
 
-    $scope.$apply(function(){
-      $scope.data[0] -= changeAmount;
-      $scope.data[1] += changeAmount;
-    })
-  },{
-    'type':'keydown',
-    'propagate':true,
-    'target':document
-  });
-
-  shortcut.add("Ctrl+4",function() {
-    var changeAmount = 10;
-    $scope.$apply(function(){
-      $scope.data[0] += changeAmount;
-      $scope.data[1] -= changeAmount;
-    })
   },{
     'type':'keydown',
     'propagate':true,
