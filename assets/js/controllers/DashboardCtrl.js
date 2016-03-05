@@ -12,8 +12,8 @@
 
 angular.module('sxspeech')
 .controller('DashboardCtrl', [
-        '$scope', '$rootScope', 'uiErrorBus', 'uiMe', 'Cloud',
-function($scope, $rootScope, uiErrorBus, uiMe, Cloud) {
+        '$scope', '$rootScope', 'uiErrorBus', 'uiMe', 'Cloud', '$state',
+function($scope, $rootScope, uiErrorBus, uiMe, Cloud, $state) {
 
   //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
   // When the controller is initially rendered
@@ -23,8 +23,10 @@ function($scope, $rootScope, uiErrorBus, uiMe, Cloud) {
     $state.go('login');
   }
   
-  $scope.$watch('countPercent', function(currentPercent){
-    Cloud.count({percent: currentPercent});
+  $scope.$watch('totalCount', function(currentCount){
+    if (currentCount){
+      Cloud.count({count: currentCount});    
+    }
   });
 
   //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//

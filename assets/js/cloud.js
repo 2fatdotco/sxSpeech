@@ -21,7 +21,7 @@ angular.module('cloudsdk').endpoints({
   // interested, see implementation in assets/js/dependencies/cloudsdk.js for details.
 
   // Cool app routes
-  count: 'POST /count/:percent',
+  count: 'POST /count',
 
   // Boring account routes
   login: 'POST /login',

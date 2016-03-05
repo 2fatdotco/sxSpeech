@@ -36,8 +36,10 @@ function($scope, $rootScope, $interval, Cloud, uiErrorBus) {
 
   // Watch final count,
   // hit API when it changes
-  $scope.$watch('totalCount', function(currentPercent){
-    Cloud.count({percent: currentPercent});
+  $scope.$watch('totalCount', function(currentCount){
+    if (currentCount){
+      Cloud.count({count: currentCount});    
+    }
   });
 
   // Get secret word
