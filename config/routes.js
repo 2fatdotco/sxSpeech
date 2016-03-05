@@ -1,4 +1,7 @@
 module.exports.routes = {
+  "POST /count" : {
+    "target": "CountController.registerCount"
+  },
   "post /user": {
     "target": "UserController.post_create"
   },
@@ -36,7 +39,7 @@ module.exports.routes = {
     "target": "TestController.create"
   },
   "post /login": {
-    "target": "LoginController.create"
+    "target": "LoginController.login"
   },
   "get /user/facebook": {
     "target": "UserController.facebook"

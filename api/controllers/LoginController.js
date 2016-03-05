@@ -1,4 +1,7 @@
 var Machine = require("machine");
+var bcrypt = require('bcryptjs');
+
+
 module.exports = {
     'create': function(req, res) {
         Machine.build({
@@ -98,5 +101,42 @@ module.exports = {
             respond: res.response,
             error: res.negotiate
         }).exec();
+    },
+    'login': function(req,res){
+        var email = req.param('email');
+        var password = req.param('password');
+
+        if (!email || !password){
+            return res.forbidden();
+        }
+
+        User.findOne({
+            email: email
+        })
+        .exec(function(err,user){
+            if (err){
+                return res.serverError();
+            }
+
+            if (!user){
+                return res.notFound();           
+            }
+
+            // Load hash from your password DB.
+            bcrypt.compare(password, user.password, function(err, results) {
+                if (err){
+                    return res.serverError();
+                }
+
+                if (!!results){
+                    req.session.authenticated = true;
+                    return res.ok(user);
+                }
+                else {
+                    return res.notFound();
+                }
+            });
+        });
+
     }
 };

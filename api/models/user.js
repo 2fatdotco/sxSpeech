@@ -8,6 +8,12 @@ module.exports = {
     },
     username: {
     	unique: true
+    },
+
+    toJSON: function(){
+      var user = this;
+      delete user.password;
+      return user;
     }
   },
 
