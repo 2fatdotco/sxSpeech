@@ -4,6 +4,7 @@
     "bcryptjs": "^2.3.0",
     "ejs": "~2.4.1",
     "include-all": "~0.1.6",
+    "less-plugin-glob": "^1.1.1",
     "lodash": "^4.5.1",
     "machine": "~11.0.3",
     "rc": "~1.1.6",
