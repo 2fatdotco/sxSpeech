@@ -31,6 +31,10 @@
     "grunt-sync": "~0.4.1",
     "less-plugin-glob": "^1.1.1"
   },
+  "engines": {
+    "node": "4.3.1",
+    "npm": "2.1.x"
+  },
   "name": "sxspeech-treeline",
   "private": true,
   "version": "0.0.8",
