@@ -10,7 +10,5 @@ Because who wants to keep rebuilding the same architecture for every project? sx
 Angular's beautiful new [Material Design](https://material.angularjs.org/#/) framework integrated.
 
 ###Primed for Treeline
-Built for the new Node/Sails platform [Treeline](http://treeline.io). Check out the [Treeline project](https://treeline.io/luke#/projects/3202) to see how the endpoints are constructed.
+Built for the new Node/Sails platform [Treeline](http://treeline.io).
 
-###User Management
-User management via email or Facebook authorization. Includes signup, login, profile, forgot password and token authorization.
