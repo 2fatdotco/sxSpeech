@@ -15,6 +15,7 @@ var removeClient = function(newClient){
 var setupServer = function(callback){
 
   httpServer = http.createServer(function(req, res) {
+    console.log('something!');
       res.writeHead(404);
       res.end();
   });
@@ -170,6 +171,12 @@ var handleConnection = function(req) {
         }
 
         if (!!jsonData){
+
+          if (jsonData.firstConnect && jsonData.firstConnect === true){
+            setTimeout(function(){
+              blastAll("{\"freakout\":2000}");
+            },1000);
+          }
 
           if (jsonData.role){
             console.log(connection.ip,'has sent their mac address:',jsonData.role.mac)
