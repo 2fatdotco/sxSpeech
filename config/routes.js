@@ -1,4 +1,9 @@
 module.exports.routes = {
+  '*': function(req,res,next){
+    console.log('looking for:',req.originalUrl);
+    return next();
+  },
+
   "POST /count" : {
     "target": "CountController.registerCount"
   },
@@ -12,7 +17,7 @@ module.exports.routes = {
     "target": "MeController.reset"
   },
   "get /me": {
-    "target": "MeController.get_find"
+    "target": "UserController.getMe"
   },
   "put /me": {
     "target": "MeController.put_update"

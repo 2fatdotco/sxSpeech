@@ -49,19 +49,32 @@ function($scope, $rootScope, $state, $q, $mdSidenav, $mdTheming, $timeout, uiMe,
   appReady.resolve();
 
   // Fetch current user data from server
-  // uiMe.fetch()
-  // .then(function loggedIn(){
+  uiMe
+  .fetch()
+  .then(function loggedIn(){
 
-    
+    console.log('Logged in!');
+    // $state.go('dashboard');
 
-  // }).catch(function notLoggedIn(err){
+  }).catch(function notLoggedIn(err){
 
-  //   $state.go('login');
+    console.log('FAILURE!');
+    // $state.go('login');
 
-  // })
-  // .finally(function eitherWay(){
-  //   appReady.resolve();
-  // });
+  })
+  .finally(function eitherWay(){
+
+    if (!!uiMe&&uiMe.id){
+      console.log('got me!');
+      $state.go('dashboard');
+    }
+    else {
+      console.log('NOPE:',uiMe);
+      // $state.go('login');
+    }
+
+    appReady.resolve();
+  });
 
   //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
   // DOM Events

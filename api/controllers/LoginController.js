@@ -110,7 +110,8 @@ module.exports = {
             return res.forbidden();
         }
 
-        User.findOne({
+        User
+        .findOne({
             email: email
         })
         .exec(function(err,user){
@@ -130,6 +131,8 @@ module.exports = {
 
                 if (!!results){
                     req.session.authenticated = true;
+                    req.session.user = user;
+                    console.log('saving user to session:',user);
                     return res.ok(user);
                 }
                 else {

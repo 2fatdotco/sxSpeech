@@ -349,5 +349,30 @@ module.exports = {
             respond: res.response,
             error: res.negotiate
         }).exec();
+    },
+    'getMe': function(req,res){
+        console.log('Getting!');
+        if (req.session && req.session.authenticated){
+            User
+            .find({id:req.session.user&&req.session.user.id})
+            .exec(function(err,user){
+                if (err){
+                    return res.serverError();
+                }
+                else {
+                    if (!user){
+                        return res.notFound();
+                    }
+                    else {
+                        req.session.user = user;
+                        return res.ok(user);
+                    }
+                }
+            });
+        }
+        else {
+            return res.forbidden();
+        }
+
     }
 };
