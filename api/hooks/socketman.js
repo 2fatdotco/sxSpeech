@@ -35,11 +35,33 @@ var setupServer = function(callback){
 };
 
 var blastAll = function(someString){
-
+  console.log('Im blastin:',someString);
   clients.forEach(function(oneClient){
     oneClient.send(someString);
   });
 
+};
+
+
+var blastRandom = function(){
+  var randEffect = Math.round(Math.random()*3+1);
+  var randDuration = Math.round(Math.random()*2500+500);
+
+  switch (randEffect){
+    case 1:
+      blastAll("{\"fadeup\":"+randDuration+"}");
+    break;
+    case 2:
+      blastAll("{\"pulse\":"+randDuration+"}");
+    break;
+    case 3:
+      blastAll("{\"fadedown\":"+randDuration+"}");
+    break;
+    case 4:
+      blastAll("{\"toggleColor\":true}");
+    break;
+    default:break;
+  }
 };
 
 var testAll = function(options){
@@ -173,17 +195,15 @@ var handleConnection = function(req) {
         if (!!jsonData){
 
           if (jsonData.firstConnect && jsonData.firstConnect === true){
-            setTimeout(function(){
-              blastAll("{\"freakout\":2000}");
-            },1000);
+            // setTimeout(function(){
+            //   blastAll("{\"freakout\":2000}");
+            // },1000);
           }
 
           if (jsonData.role){
             console.log(connection.ip,'has sent their mac address:',jsonData.role.mac)
           }
-
         }
-
       }
     });
 
@@ -230,6 +250,8 @@ module.exports = function socketman(sails) {
     wsServer: wsServer,
     clients: clients,
     blastAll: blastAll,
-    testAll: testAll
+    testAll: testAll,
+    blastRandom: blastRandom,
+    tweets: true
   };
 };
