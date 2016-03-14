@@ -1,0 +1,58 @@
+<!-- I dont know which of you cheeky fuckers put a stylesheet in an html partial but when I find out, YOURE FIRED! -->
+
+
+<style>
+
+body {
+	text-align:center;
+	width:100%;
+}
+
+.b{
+	cursor:pointer;
+	border:2px solid black;
+	border-radius:15px;
+	height: 50px;
+	width: 160px;
+	padding-top: 20px;
+    margin: 20px 50px;
+}
+
+#wb{
+	background-color:lightblue;
+}
+
+input {
+	/*padding-bottom:10px;*/
+}
+
+table {
+	max-width:800px;
+	margin: auto;
+}
+
+p {
+	font-family: "Lucida Console", Monaco, monospace;
+}
+
+</style>
+
+<div id="dashboard">
+
+	<h1 class="md-display-2">Manual Control</h1>
+
+	<table>
+		<td>
+			<div id="rb" class="b" ng-click="red()">Red</div>
+			<div id="wb" class="b" ng-click="white()">White</div>
+		</td>
+		<td>
+			<p>Light Level</p><input id="level" type="range" min="-1" max="144" step="1" value="10" ng-change="setProp(this)"><br>
+			<p>Pulse</p><input id="pulse" type="range" min="250" max="10000" step="250" value="2000" ng-change="setProp(this)"><br>
+			<p>Fadeup</p><input id="fadeup" type="range" min="250" max="10000" step="250" value="2000" ng-change="setProp(this)"><br>
+			<p>Fadedown</p><input id="fadedown" type="range" min="250" max="10000" step="250" value="2000" ng-change="setProp(this)"><br>
+			<p>Freakout</p><input id="setFreakLevel" type="range" min="2" max="30" step="1" value="3" ng-change="setProp(this)"><br>
+		</td>
+	</table>
+
+</div>
