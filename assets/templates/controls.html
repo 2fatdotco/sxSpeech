@@ -47,11 +47,13 @@ p {
 			<div id="wb" class="b" ng-click="white()">White</div>
 		</td>
 		<td>
-			<p>Light Level</p><input ng-model="level" id="level" type="range" min="-1" max="144" step="1" value="10" ng-change="setProp(this)"><br>
-			<p>Pulse</p><input ng-model="pulse" id="pulse" type="range" min="250" max="10000" step="250" value="2000" ng-change="setProp(this)"><br>
-			<p>Fadeup</p><input ng-model="fadeup" id="fadeup" type="range" min="250" max="10000" step="250" value="2000" ng-change="setProp(this)"><br>
-			<p>Fadedown</p><input ng-model="fadedown" id="fadedown" type="range" min="250" max="10000" step="250" value="2000" ng-change="setProp(this)"><br>
-			<p>Freakout</p><input ng-model="setFreakLevel" id="setFreakLevel" type="range" min="2" max="30" step="1" value="3" ng-change="setProp(this)"><br>
+			<p>Light Level</p><input ng-model="props.level" id="level" type="range" min="-1" max="144" step="1" value="10" ng-change="setProp('level')"><br>
+			<p>Pulse</p><input ng-model="props.pulse" id="pulse" type="range" min="250" max="10000" step="250" value="2000" ng-change="setProp('pulse')"><br>
+			<p>Fadeup</p><input ng-model="props.fadeup" id="fadeup" type="range" min="250" max="10000" step="250" value="2000" ng-change="setProp('fadeup')"><br>
+			<p>Fadedown</p><input ng-model="props.fadedown" id="fadedown" type="range" min="250" max="10000" step="250" value="2000" ng-change="setProp('fadedown')"><br>
+			<p>FreakLevel</p><input ng-model="props.setFreakLevel" id="setFreakLevel" type="range" min="2" max="30" step="1" value="3" ng-change="setProp('setFreakLevel')"><br>
+			<p>Freakout</p><input ng-model="props.freakout" id="freakout" type="range" min="1000" max="20000" step="1000" value="3000" ng-change="setProp('freakout')"><br>
+
 		</td>
 	</table>
 

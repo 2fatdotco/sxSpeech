@@ -23,7 +23,7 @@ function($scope, $rootScope, uiErrorBus, uiMe, Cloud, $state) {
     $state.go('login');
   }
   
-  var props = {
+  $scope.props = {
     level: 10,
     pulse: 2000,
     fadeup: 2000,
@@ -37,13 +37,12 @@ function($scope, $rootScope, uiErrorBus, uiMe, Cloud, $state) {
     return;
   };
 
-  $scope.setProp = function(elem){
-    props[elem.id] = Number(elem.value);
+  $scope.setProp = function(elemName){
     var msg = {};
-    msg[elem.id] = Number(elem.value);
+    msg[elemName] = Number($scope.props[elemName]);
     sendCommand(JSON.stringify(msg));
 
-    if (elem.id === 'setFreakLevel'){
+    if (elemName === 'setFreakLevel'){
       setTimeout(function(){
         sendCommand('{"freakout":3000}');
       },1000);
