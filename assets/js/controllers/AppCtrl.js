@@ -20,8 +20,6 @@ function($scope, $rootScope, $state, $q, $mdSidenav, $mdTheming, $timeout, uiMe,
     theme: $mdTheming
   }
 
-  window.uiMe = uiMe;
-
   $scope.uiMe = uiMe;
 
   //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
@@ -55,24 +53,19 @@ function($scope, $rootScope, $state, $q, $mdSidenav, $mdTheming, $timeout, uiMe,
   .fetch()
   .then(function loggedIn(){
 
-    console.log('Logged in!');
-    // $state.go('dashboard');
+    $state.go('dashboard');
 
   }).catch(function notLoggedIn(err){
-
-    console.log('FAILURE!');
-    // $state.go('login');
+    $state.go('login');
 
   })
   .finally(function eitherWay(){
 
     if (!!uiMe&&uiMe.id){
-      console.log('got me!');
       $state.go('dashboard');
     }
     else {
-      console.log('NOPE:',uiMe);
-      // $state.go('login');
+      $state.go('login');
     }
 
     appReady.resolve();

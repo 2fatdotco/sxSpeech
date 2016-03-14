@@ -1,8 +1,8 @@
 module.exports.routes = {
-  '*': function(req,res,next){
-    console.log('looking for:',req.originalUrl);
-    return next();
-  },
+  // '*': function(req,res,next){
+  //   console.log('looking for:',req.originalUrl);
+  //   return next();
+  // },
 
   "POST /count" : {
     "target": "CountController.registerCount"
