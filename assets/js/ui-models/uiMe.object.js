@@ -26,6 +26,7 @@ function( Cloud, uiErrorBus ) {
 
       return Cloud.getMyProfile()
       .then(function whenServerResponds(data) {
+        console.log('DAta fetched:',data);
         self.replace(data);
       });
     },

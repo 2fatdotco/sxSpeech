@@ -354,7 +354,7 @@ module.exports = {
         console.log('Getting!');
         if (req.session && req.session.authenticated){
             User
-            .find({id:req.session.user&&req.session.user.id})
+            .findOne({id:req.session.user&&req.session.user.id})
             .exec(function(err,user){
                 if (err){
                     return res.serverError();

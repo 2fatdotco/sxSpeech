@@ -79,6 +79,8 @@ function($scope, $rootScope, uiErrorBus, uiMe, Cloud, $state) {
     sendCommand("{\"toggleMood\":"+props['toggleMood']+"}");
   };
 
+
+
   //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
   // DOM Events
   //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//

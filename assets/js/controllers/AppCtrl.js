@@ -20,6 +20,8 @@ function($scope, $rootScope, $state, $q, $mdSidenav, $mdTheming, $timeout, uiMe,
     theme: $mdTheming
   }
 
+  window.uiMe = uiMe;
+
   $scope.uiMe = uiMe;
 
   //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
