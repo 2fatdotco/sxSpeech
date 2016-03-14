@@ -17,6 +17,7 @@ function($scope, $rootScope, $interval, $timeout, Cloud, uiErrorBus) {
   // Define controller variables
   var final_transcript = '';
   var interim_transcript = '';
+  var forced_transcript = '';
   var confidenceThreshold = 0.7;
 
   // Set scope
@@ -79,8 +80,6 @@ function($scope, $rootScope, $interval, $timeout, Cloud, uiErrorBus) {
   // process the audio input
   recognition.onresult = function(event) {
 
-    console.log("Speech result with listening set to ", $scope.listening, '. Event: ', event);
-
     // If not $scope.listening, 
     // return without processing
     if(!$scope.listening) return;
@@ -105,6 +104,10 @@ function($scope, $rootScope, $interval, $timeout, Cloud, uiErrorBus) {
           interim_transcript = event.results[i][0].transcript.toLowerCase();
         }
       }
+    }
+
+    if(forced_transcript.length > 0){
+      final_transcript += forced_transcript;
     }
 
     // If this is a final transcription
@@ -159,7 +162,7 @@ function($scope, $rootScope, $interval, $timeout, Cloud, uiErrorBus) {
     // because that's the range of the chart
     if($scope.totalCount >= 140){
       $scope.totalCount = 140;
-      $scope.listening = false;
+      $scope.listening = false; 
     }
 
     $scope.$apply(function(){
@@ -247,8 +250,6 @@ function($scope, $rootScope, $interval, $timeout, Cloud, uiErrorBus) {
 
   shortcut.add("Ctrl+3",function() {
     
-    
-
   },{
     'type':'keydown',
     'propagate':true,
