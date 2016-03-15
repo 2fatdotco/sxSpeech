@@ -167,6 +167,37 @@ var handleConnection = function(req) {
     console.log('http connection made by',reqIp);
 
 
+    Lamp
+    .find()
+    .exec(function(err,lamps){
+      if (err){
+        sails.log('Error finding lamps:',lamps);
+      }
+
+      var grabLamp = _.find(lamps,{mac:reqMac});
+
+      var sortedLamps = _.sortBy(lamps,'position');
+
+      if (!grabLamp){
+        Lamp
+        .create({
+          ip: reqIp,
+          mac: reqMac,
+          position: sortedLamps[sortedLamps.length-1] && sortedLamps[sortedLamps.length-1]['position'] ? sortedLamps[sortedLamps.length-1]['position'] + 1 : 0
+        })
+        .exec(function(err,lamp){
+          if (err){
+            sails.log('Error creating lamp record');
+            return;
+          }
+          
+          sails.log('Created new lamp record for lamp number',lamps[0]['position']);
+          return;
+        });
+      }
+
+    });
+
     // connection.on('connection', function())
 
     connection.on('message', function(message) {
