@@ -49,26 +49,20 @@ function($scope, $rootScope, $state, $q, $mdSidenav, $mdTheming, $timeout, uiMe,
   appReady.resolve();
 
   // Fetch current user data from server
-  uiMe
-  .fetch()
+  uiMe.fetch()
   .then(function loggedIn(){
 
-    $state.go('dashboard');
+    // Do nothing
 
   }).catch(function notLoggedIn(err){
+
     $state.go('login');
 
   })
   .finally(function eitherWay(){
 
-    if (!!uiMe&&uiMe.id){
-      $state.go('dashboard');
-    }
-    else {
-      $state.go('login');
-    }
-
     appReady.resolve();
+    
   });
 
   //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//

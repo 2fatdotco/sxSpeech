@@ -22,6 +22,8 @@ angular.module('cloudsdk').endpoints({
 
   // Cool app routes
   count: 'POST /count',
+  toggleTweets: 'POST /lamps/config',
+  sendCommand: 'POST /lamps/command',
 
   // Boring account routes
   login: 'POST /login',

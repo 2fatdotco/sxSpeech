@@ -2,15 +2,24 @@
 
 	<h1 class="md-display-2">Dashboard</h1>
 
-	<div class="slider">
-		<p class="md-body-1">Use the slider below to send a POST request to <code>/count</code> with the parameter <code>percent</code>. This will let you test the API while I finish the character counter.</p>
-		<md-slider flex ng-model="countPercent" step="1" min="0" max="100" aria-label="Count Percent"></md-slider>
-	</div>
-
-	<h3 class="md-title">{{ countPercent || 0 }}%</h3>
-
-	<div class="box">
-		<div class="white" style="opacity: {{ countPercent / 100}};"></div>
+	<div layout="row" layout-align="center" layout-padding>
+		<div class="toggles">
+		  <md-button class="md-accent" ng-class="{'md-raised': lampColor == 'red'}" ng-click="setRed()">Set Lamps Red</md-button>
+		  <md-button class="md-accent" ng-class="{'md-raised': lampColor == 'white'}" ng-click="setWhite()">Set Lamps White</md-button>
+		  <md-switch ng-model="watchTwitter" aria-label="Twitter" class="watch-twitter" ng-change="intent.toggleTweets(watchTwitter)">
+		    Watch Twitter?
+		  </md-switch>
+		</div>
+		<div flex="10">
+		</div>
+		<div class="controls">
+			<p>Light Level</p><input ng-model="props.level" ng-model-options='{ debounce: 1000 }' id="level" type="range" min="-1" max="144" step="1" value="10" ng-change="setProp('level')"><br>
+			<p>Pulse</p><input ng-model="props.pulse" ng-model-options='{ debounce: 1000 }' id="pulse" type="range" min="250" max="10000" step="250" value="2000" ng-change="setProp('pulse')"><br>
+			<p>Fadeup</p><input ng-model="props.fadeup" ng-model-options='{ debounce: 1000 }' id="fadeup" type="range" min="250" max="10000" step="250" value="2000" ng-change="setProp('fadeup')"><br>
+			<p>Fadedown</p><input ng-model="props.fadedown" ng-model-options='{ debounce: 1000 }' id="fadedown" type="range" min="250" max="10000" step="250" value="2000" ng-change="setProp('fadedown')"><br>
+			<p>FreakLevel</p><input ng-model="props.setFreakLevel" ng-model-options='{ debounce: 1000 }' id="setFreakLevel" type="range" min="2" max="30" step="1" value="3" ng-change="setProp('setFreakLevel')"><br>
+			<p>Freakout</p><input ng-model="props.freakout" ng-model-options='{ debounce: 1000 }' id="freakout" type="range" min="1000" max="20000" step="1000" value="3000" ng-change="setProp('freakout')"><br>
+		</div>
 	</div>
 
 </div>
