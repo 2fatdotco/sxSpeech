@@ -35,8 +35,9 @@ module.exports.policies = {
   *                                                                          *
   ***************************************************************************/
 	CountController: {
-
 		'*': ['sessionAuth']
-
-	}
+	},
+  LampController: {
+    '*': ['sessionAuth']
+  }
 };

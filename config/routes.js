@@ -7,6 +7,12 @@ module.exports.routes = {
   "POST /count" : {
     "target": "CountController.registerCount"
   },
+  "POST /lamps/config" : {
+    "target": "LampController.changeLampConfig"
+  },
+  "POST /lamps/command" : {
+    "target": "LampController.executeLampCommand"
+  },
   "post /user": {
     "target": "UserController.post_create"
   },

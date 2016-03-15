@@ -7,6 +7,8 @@ var httpServer;
 var wsServer;
 var clients = [];
 
+// Todo: build proper module for Lamps with effects as prototype methods.
+
 var removeClient = function(newClient){
   var oldLength = clients.length;
   clients = _.without(clients,{ip:newClient.ip,mac:newClient.mac});
@@ -42,6 +44,51 @@ var blastAll = function(someString){
 
 };
 
+var blastThese = function(someString,arrayOfClients){
+  console.log('Im blastin:',someString);
+  arrayOfClients.forEach(function(oneClient){
+    if (!!oneClient){
+      oneClient.send(someString);
+    }
+  });
+};
+
+
+var setFreakLevel = function(someVal){
+  blastAll('{"setFreakLevel":'+someVal+'}');
+};
+
+var level = function(someVal){
+  blastAll('{"level":'+someVal+'}');
+};
+
+var freakout = function(someVal){
+  blastAll('{"freakout":'+someVal+'}');
+};
+
+var setWhite = function(someVal){
+  blastAll('{"setWhite":true}');
+};
+
+var setRed = function(someVal){
+  blastAll('{"setRed":true}');
+};
+
+var pulse = function(someVal){
+  blastAll('{"pulse":'+someVal+'}');
+};
+
+var fadeup = function(someVal){
+  blastAll('{"fadeup":'+someVal+'}');
+};
+
+var fadedown = function(someVal){
+  blastAll('{"fadedown":'+someVal+'}');
+};
+
+var toggleColor = function(someVal){
+  blastAll('{"toggleColor":true}');
+};
 
 var blastRandom = function(){
   var randEffect = Math.round(Math.random()*3+1);
@@ -62,6 +109,115 @@ var blastRandom = function(){
     break;
     default:break;
   }
+};
+
+
+var colChase = function(){
+
+};
+
+var rowChase = function(duration,callback){
+
+  async.auto({
+    'getLamps': [function(next,results){
+
+      Lamp
+      .find()
+      .exec(function(err,lamps){
+        if (err){
+          sails.log('Error fetching lamps');
+          return next(err);
+        }
+        return next(null,_.sortBy(lamps,'position'));
+      });
+
+    }],
+    'buildMatrix': ['getLamps',function(next,results){
+
+      var matrix = [];
+      var missingClients = [];
+
+      var lampsPerRow = sails.hooks.socketman.matrixConfig.cols;
+      var sortedLamps = results.getLamps;
+
+      var currentRow = [];
+
+      while(sortedLamps.length){
+        var grabLamp = sortedLamps.pop();
+        var findClient = _.find(clients,{mac:grabLamp.mac}) || null;
+
+        if (!findClient){
+          missingClients.push(grabLamp.position);
+        }
+
+        if (currentRow.length < lampsPerRow){
+          currentRow.push(findClient);
+        }
+
+        else if (currentRow.length === lampsPerRow){
+          currentRow.push(findClient);
+          matrix.push(currentRow);
+          currentRow = [];
+        }
+
+        if (!sortedLamps.length){
+          matrix.push(currentRow);
+          delete currentRow;
+        }
+
+      } 
+
+      return next(null,{matrix:matrix,missingClients:missingClients});
+    }],
+    'triggerEffect': ['buildMatrix',function(next,results){
+      var matrix = results.buildMatrix.matrix;
+
+      console.log('There are currently:',results.buildMatrix.missingClients.length,'missing lamps');
+      console.log('and',matrix.length,'rows of',(matrix[0]&&matrix[0].length));
+
+      var msPerRow = Math.round(duration / matrix.length);
+
+      var changeInterval;
+
+      var grabRow;
+      var theRest = [];
+      var hotRow = 0;
+
+      var doChange = function(){
+        if (!matrix.length){
+          clearInterval(changeInterval);
+        }
+        else {
+
+          matrix.forEach(function(oneRow,index){
+            if (index === hotRow){
+              grabRow = oneRow;
+            }
+            else {
+              theRest = theRest.concat(oneRow);
+            }
+            hotRow++;
+          });
+
+          blastThese('{"level":140}',grabRow);
+          blastThese('{"level":10}',theRest);
+        }
+
+      }
+
+      changeInterval = setInterval(doChange,msPerRow);
+
+      return next();
+    }],
+  }, function(err,results){
+    if (err){
+      sails.log('Error with lighting effect');
+      return;
+    }
+
+    return callback();
+
+  });
 };
 
 var testAll = function(options){
@@ -159,13 +315,21 @@ var saveInEventLog = function(record){
 
 };
 
+
+var setMatrix = function(){
+
+};
+
+var positionAt = function(){
+
+};
+
 var handleConnection = function(req) {
     var reqIp = req.httpRequest&&req.httpRequest.connection&&req.httpRequest.connection.remoteAddress.replace(/([ a-zA-Z:]+)(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})/,'$2');
     var reqMac = req.httpRequest&&req.httpRequest.headers&&req.httpRequest.headers['sec-websocket-protocol'];
 
     var connection = _.extend(req.accept(null, req.origin),{ip:reqIp,req:req,mac:reqMac});
     console.log('http connection made by',reqIp);
-
 
     Lamp
     .find()
@@ -178,20 +342,22 @@ var handleConnection = function(req) {
 
       var sortedLamps = _.sortBy(lamps,'position');
 
+      var posOfLast = sortedLamps[sortedLamps.length-1] && sortedLamps[sortedLamps.length-1]['position'];
+console.log('position of last:',posOfLast);
       if (!grabLamp){
         Lamp
         .create({
           ip: reqIp,
           mac: reqMac,
-          position: sortedLamps[sortedLamps.length-1] && sortedLamps[sortedLamps.length-1]['position'] ? sortedLamps[sortedLamps.length-1]['position'] + 1 : 0
+          position: posOfLast ? posOfLast + 1 : 1
         })
         .exec(function(err,lamp){
           if (err){
             sails.log('Error creating lamp record');
             return;
           }
-          
-          sails.log('Created new lamp record for lamp number',lamps[0]['position']);
+
+          sails.log('Created new lamp record for lamp number',(lamps[0] && lamps[0]['position']));
           return;
         });
       }
@@ -283,6 +449,23 @@ module.exports = function socketman(sails) {
     blastAll: blastAll,
     testAll: testAll,
     blastRandom: blastRandom,
+    setFreakLevel: setFreakLevel,
+    level: level,
+    freakout: freakout,
+    setWhite: setWhite,
+    setRed: setRed,
+    pulse: pulse,
+    fadedown: fadeup,
+    fadeup: fadedown,
+    toggleColor: toggleColor,
+    setMatrix: setMatrix,
+    positionAt: positionAt,
+    matrixConfig: {
+      cols: 8,
+      rows: 10
+    },
+    matrix: [],
+    rowChase: rowChase,
     tweets: true
   };
 };
