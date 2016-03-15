@@ -1,5 +1,5 @@
 <!-- Core dynamic content section -->
-<div id="content" layout="column">
+<div id="content" layout="column" ng-class="{count: $state.$current.name == 'count'}">
 
   <div ui-view ng-hide="uiMe.syncing.app"></div>
 

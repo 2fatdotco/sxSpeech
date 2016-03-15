@@ -17,10 +17,12 @@ function($scope, $rootScope, $state, $q, $mdSidenav, $mdTheming, $timeout, uiMe,
 
   window.ui = {
     me: uiMe,
-    theme: $mdTheming
+    theme: $mdTheming,
+    state: $state
   }
 
   $scope.uiMe = uiMe;
+  $scope.$state = $state;
 
   //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
   // When the application is initially rendered

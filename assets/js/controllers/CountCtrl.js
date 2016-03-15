@@ -17,7 +17,7 @@ function($scope, $rootScope, $interval, $timeout, Cloud, uiErrorBus) {
   // Define controller variables
   var final_transcript = '';
   var interim_transcript = '';
-  var forced_transcript = '';
+  var forced_transcript = 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Cras varius. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Fusce id purus. Etiam vitae tortor. Nullam vel sem.'.toLowerCase();
   var confidenceThreshold = 0.7;
 
   // Set scope
@@ -106,10 +106,6 @@ function($scope, $rootScope, $interval, $timeout, Cloud, uiErrorBus) {
       }
     }
 
-    if(forced_transcript.length > 0){
-      final_transcript += forced_transcript;
-    }
-
     // If this is a final transcription
     if(final_transcript.length > 0){
 
@@ -174,7 +170,6 @@ function($scope, $rootScope, $interval, $timeout, Cloud, uiErrorBus) {
 
   // Start recoginition object
   function startListening(event) {
-    console.log("Start listening...");
     //resetCounter();
     recognition.start();
     
@@ -186,7 +181,6 @@ function($scope, $rootScope, $interval, $timeout, Cloud, uiErrorBus) {
   // Stop recognition object
   // and reset counter
   function stopListening(event) {
-    console.log("Stop listening...");
     recognition.stop();
     resetCounter();
 
@@ -248,8 +242,22 @@ function($scope, $rootScope, $interval, $timeout, Cloud, uiErrorBus) {
     'target':document
   });
 
-  shortcut.add("Ctrl+3",function() {
-    
+  shortcut.add("Ctrl+0",function() {
+    recognition.stop();
+
+    if($scope.finalTranscript){
+      $scope.finalTranscript = $scope.finalTranscript + ' ' + forced_transcript;
+    }
+    else{
+      $scope.finalTranscript = forced_transcript;;
+    }
+
+    $scope.$apply(function(){
+      // Force end
+      $scope.data[0] = 140;
+      $scope.data[1] = 0;
+    });
+
   },{
     'type':'keydown',
     'propagate':true,
