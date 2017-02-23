@@ -18,7 +18,7 @@ function($scope, $rootScope, $interval, $timeout, Cloud, uiErrorBus) {
   var final_transcript = '';
   var interim_transcript = '';
   var forced_transcript = 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Cras varius. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Fusce id purus. Etiam vitae tortor. Nullam vel sem.'.toLowerCase();
-  var confidenceThreshold = 0.7;
+  var confidenceThreshold = 0.2;
 
   // Set scope
   $scope.labels = ["Said", "Unsaid"];
@@ -79,6 +79,8 @@ function($scope, $rootScope, $interval, $timeout, Cloud, uiErrorBus) {
   // On result event
   // process the audio input
   recognition.onresult = function(event) {
+
+    console.log(event);
 
     // If not $scope.listening, 
     // return without processing
@@ -158,7 +160,9 @@ function($scope, $rootScope, $interval, $timeout, Cloud, uiErrorBus) {
     // because that's the range of the chart
     if($scope.totalCount >= 140){
       $scope.totalCount = 140;
-      $scope.listening = false; 
+      $scope.listening = false;
+      Cloud.sendCommand("{\"setFreakLevel\":2}");
+      Cloud.sendCommand("{\"freakout\":6000}");
     }
 
     $scope.$apply(function(){
@@ -172,6 +176,8 @@ function($scope, $rootScope, $interval, $timeout, Cloud, uiErrorBus) {
   function startListening(event) {
     //resetCounter();
     recognition.start();
+
+    Cloud.sendCommand("{\"setWhite\":true}");
     
     $scope.$apply(function(){
       $scope.listening = true;
@@ -191,6 +197,10 @@ function($scope, $rootScope, $interval, $timeout, Cloud, uiErrorBus) {
 
   // Reset the counter
   function resetCounter(){
+
+    Cloud.sendCommand("{\"setWhite\":true}");
+    // Reset the count on API
+    Cloud.count({count: 5});  
   
     // Reset counters
     $scope.finalCount = 0;
@@ -209,8 +219,6 @@ function($scope, $rootScope, $interval, $timeout, Cloud, uiErrorBus) {
       $scope.data[1] = 140;
     });
 
-    // Reset the count on API
-    Cloud.count({count: -1});  
   };
 
   // Helper function to retrieve URL params
@@ -235,6 +243,7 @@ function($scope, $rootScope, $interval, $timeout, Cloud, uiErrorBus) {
   });
 
   shortcut.add("Ctrl+2",function() {
+    recognition.stop();
     stopListening();
   },{
     'type':'keydown',
@@ -244,6 +253,11 @@ function($scope, $rootScope, $interval, $timeout, Cloud, uiErrorBus) {
 
   shortcut.add("Ctrl+0",function() {
     recognition.stop();
+    stopListening();
+
+    Cloud.count({count: 140});
+    Cloud.sendCommand("{\"setFreakLevel\":2}");
+    Cloud.sendCommand("{\"freakout\":6000}");
 
     if($scope.finalTranscript){
       $scope.finalTranscript = $scope.finalTranscript + ' ' + forced_transcript;
