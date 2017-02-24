@@ -132,7 +132,6 @@ module.exports = {
                 if (!!results){
                     req.session.authenticated = true;
                     req.session.user = user;
-                    console.log('saving user to session:',user);
                     return res.ok(user);
                 }
                 else {

@@ -351,7 +351,6 @@ module.exports = {
         }).exec();
     },
     'getMe': function(req,res){
-        console.log('Getting!');
         if (req.session && req.session.authenticated){
             User
             .findOne({id:req.session.user&&req.session.user.id})

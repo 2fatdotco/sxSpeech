@@ -42,8 +42,8 @@ function($scope, $rootScope, $interval, $timeout, Cloud, uiErrorBus) {
   // hit API when it changes
   $scope.$watch('totalCount', function(currentCount){
     if (currentCount){
-      console.log("Count: ", currentCount);
-      Cloud.count({count: currentCount});    
+      // console.log("Count: ", currentCount);
+      // Cloud.count({count: currentCount});    
     }
   });
 
@@ -79,8 +79,6 @@ function($scope, $rootScope, $interval, $timeout, Cloud, uiErrorBus) {
   // On result event
   // process the audio input
   recognition.onresult = function(event) {
-
-    console.log(event);
 
     // If not $scope.listening, 
     // return without processing
@@ -161,8 +159,8 @@ function($scope, $rootScope, $interval, $timeout, Cloud, uiErrorBus) {
     if($scope.totalCount >= 140){
       $scope.totalCount = 140;
       $scope.listening = false;
-      Cloud.sendCommand("{\"setFreakLevel\":2}");
-      Cloud.sendCommand("{\"freakout\":6000}");
+      // Cloud.sendCommand("{\"setFreakLevel\":2}");
+      // Cloud.sendCommand("{\"freakout\":6000}");
     }
 
     $scope.$apply(function(){
@@ -177,7 +175,7 @@ function($scope, $rootScope, $interval, $timeout, Cloud, uiErrorBus) {
     //resetCounter();
     recognition.start();
 
-    Cloud.sendCommand("{\"setWhite\":true}");
+    // Cloud.sendCommand("{\"setWhite\":true}");
     
     $scope.$apply(function(){
       $scope.listening = true;
@@ -198,9 +196,9 @@ function($scope, $rootScope, $interval, $timeout, Cloud, uiErrorBus) {
   // Reset the counter
   function resetCounter(){
 
-    Cloud.sendCommand("{\"setWhite\":true}");
+    // Cloud.sendCommand("{\"setWhite\":true}");
     // Reset the count on API
-    Cloud.count({count: 5});  
+    // Cloud.count({count: 5});  
   
     // Reset counters
     $scope.finalCount = 0;
@@ -255,9 +253,9 @@ function($scope, $rootScope, $interval, $timeout, Cloud, uiErrorBus) {
     recognition.stop();
     stopListening();
 
-    Cloud.count({count: 140});
-    Cloud.sendCommand("{\"setFreakLevel\":2}");
-    Cloud.sendCommand("{\"freakout\":6000}");
+    // Cloud.count({count: 140});
+    // Cloud.sendCommand("{\"setFreakLevel\":2}");
+    // Cloud.sendCommand("{\"freakout\":6000}");
 
     if($scope.finalTranscript){
       $scope.finalTranscript = $scope.finalTranscript + ' ' + forced_transcript;
