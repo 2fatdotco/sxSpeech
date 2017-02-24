@@ -15,9 +15,10 @@ angular.module('sxspeech')
 function($scope, $rootScope, $interval, $timeout, Cloud, uiErrorBus) {
 
   // Define controller variables
-  var final_transcript = '';
-  var interim_transcript = '';
-  var forced_transcript = 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Cras varius. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Fusce id purus. Etiam vitae tortor. Nullam vel sem.'.toLowerCase();
+  var finalTranscript = '';
+  var interimTranscript = '';
+  var forcedTranscript = 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Cras varius. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Fusce id purus. Etiam vitae tortor. Nullam vel sem.'.toLowerCase();
+  var partialTranscript = 'Lorem ipsum ';
   var confidenceThreshold = 0.2;
 
   // Set scope
@@ -92,36 +93,36 @@ function($scope, $rootScope, $interval, $timeout, Cloud, uiErrorBus) {
     // and build transcript strings
     for (var i = event.resultIndex; i < event.results.length; ++i) {
       if (event.results[i].isFinal) {
-        final_transcript += event.results[i][0].transcript.toLowerCase();
+        finalTranscript += event.results[i][0].transcript.toLowerCase();
 
         // Received final, reset interim
         $scope.interimCount = 0;
-        interim_transcript = '';
+        interimTranscript = '';
         $scope.interimTranscript = '';
       }
       else{
         if(event.results[i][0].confidence > confidenceThreshold){
-          interim_transcript = event.results[i][0].transcript.toLowerCase();
+          interimTranscript = event.results[i][0].transcript.toLowerCase();
         }
       }
     }
 
     // If this is a final transcription
-    if(final_transcript.length > 0){
+    if(finalTranscript.length > 0){
 
       // Populate the final count with the final string length
-      $scope.finalCount = final_transcript.length;
+      $scope.finalCount = finalTranscript.length;
     }
 
     // Else if this is an interim transcription
-    if(interim_transcript.length > 0){
+    if(interimTranscript.length > 0){
       // Populate the interim counter with the interim string length
-      $scope.interimCount = interim_transcript.length;
+      $scope.interimCount = interimTranscript.length;
     }
 
     // Detect the secret word
     // to reset the counter
-    if(final_transcript.indexOf(secretWord) > 0){
+    if(finalTranscript.indexOf(secretWord) > 0){
       resetCounter();
       return;
     }
@@ -136,18 +137,18 @@ function($scope, $rootScope, $interval, $timeout, Cloud, uiErrorBus) {
     // }
 
     // Set interim transcript to scope
-    $scope.interimTranscript = interim_transcript;
+    $scope.interimTranscript = interimTranscript;
 
     if($scope.totalCount < 140){
 
-      var finalText = final_transcript.trim();
+      var finalText = finalTranscript.trim();
 
-      if(interim_transcript && interim_transcript.indexOf(secretWord) < 0){
-        var interimText = interim_transcript.trim();
-        if(final_transcript){
+      if(interimTranscript && interimTranscript.indexOf(secretWord) < 0){
+        var interimText = interimTranscript.trim();
+        if(finalTranscript){
           var interimText = ' ' + interimText;
         }
-        var finalText = finalText + interim_transcript;
+        var finalText = finalText + interimTranscript;
       }
 
       // Set the final transcription to scope
@@ -208,8 +209,8 @@ function($scope, $rootScope, $interval, $timeout, Cloud, uiErrorBus) {
     // Clear the transcriptions
     $scope.interimTranscript = '';
     $scope.finalTranscript = '';
-    interim_transcript = '';
-    final_transcript = '';
+    interimTranscript = '';
+    finalTranscript = '';
 
     // Apply changes to scope
     $scope.$apply(function(){
@@ -249,6 +250,21 @@ function($scope, $rootScope, $interval, $timeout, Cloud, uiErrorBus) {
     'target':document
   });
 
+  shortcut.add("Ctrl+9",function() {
+
+    if($scope.finalTranscript){
+      $scope.finalTranscript = $scope.finalTranscript + ' ' + partialTranscript;
+    }
+    else{
+      $scope.finalTranscript = partialTranscript;
+    }
+
+  },{
+    'type':'keydown',
+    'propagate':true,
+    'target':document
+  });
+
   shortcut.add("Ctrl+0",function() {
     recognition.stop();
     stopListening();
@@ -258,10 +274,10 @@ function($scope, $rootScope, $interval, $timeout, Cloud, uiErrorBus) {
     // Cloud.sendCommand("{\"freakout\":6000}");
 
     if($scope.finalTranscript){
-      $scope.finalTranscript = $scope.finalTranscript + ' ' + forced_transcript;
+      $scope.finalTranscript = $scope.finalTranscript + ' ' + forcedTranscript;
     }
     else{
-      $scope.finalTranscript = forced_transcript;;
+      $scope.finalTranscript = forcedTranscript;
     }
 
     $scope.$apply(function(){
