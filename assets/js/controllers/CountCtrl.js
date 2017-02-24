@@ -20,6 +20,7 @@ function($scope, $rootScope, $interval, $timeout, Cloud, uiErrorBus) {
   var forcedTranscript = 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Cras varius. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Fusce id purus. Etiam vitae tortor. Nullam vel sem.'.toLowerCase();
   var partialTranscript = 'Lorem ipsum ';
   var confidenceThreshold = 0.2;
+  var manualEntry = false;
 
   // Set scope
   $scope.labels = ["Said", "Unsaid"];
@@ -251,13 +252,32 @@ function($scope, $rootScope, $interval, $timeout, Cloud, uiErrorBus) {
   });
 
   shortcut.add("Ctrl+9",function() {
+    manualEntry = !manualEntry;
+    if (manualEntry) recognition.stop();
+    console.log('recognition stopped');
+    window.onkeyup = function(event) {
+      $scope.options.animationSteps = 4;
+      if($scope.totalCount <= 140 && manualEntry && !event.ctrlKey && event.key && event.key.length === 1) {
+        $scope.listening = true;
+        $scope.$apply(function() {
+          if($scope.finalTranscript) {
+            $scope.finalTranscript += event.key;
+          }
+          else {
+            $scope.finalTranscript = event.key;
+          }
+        });
 
-    if($scope.finalTranscript){
-      $scope.finalTranscript = $scope.finalTranscript + ' ' + partialTranscript;
-    }
-    else{
-      $scope.finalTranscript = partialTranscript;
-    }
+        $scope.totalCount = $scope.finalTranscript.length;
+
+        // Apply the total count
+        $scope.data[0] = $scope.totalCount;
+        $scope.data[1] = (140 - $scope.totalCount);
+      }
+      else {
+        $scope.options.animationSteps = 60;
+      }
+    };
 
   },{
     'type':'keydown',
