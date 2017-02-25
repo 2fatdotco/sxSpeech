@@ -235,6 +235,7 @@ function($scope, $rootScope, $interval, $timeout, Cloud, uiErrorBus) {
    */
 
   shortcut.add("Ctrl+1",function() {
+    manualEntry = false;
     startListening();
   },{
     'type':'keydown',
@@ -243,6 +244,7 @@ function($scope, $rootScope, $interval, $timeout, Cloud, uiErrorBus) {
   });
 
   shortcut.add("Ctrl+2",function() {
+    manualEntry = false;
     recognition.stop();
     stopListening();
   },{
@@ -253,12 +255,18 @@ function($scope, $rootScope, $interval, $timeout, Cloud, uiErrorBus) {
 
   shortcut.add("Ctrl+9",function() {
     manualEntry = !manualEntry;
-    if (manualEntry) recognition.stop();
+    console.log('manual entry: ', manualEntry);
+    if (manualEntry) {
+      recognition.stop();
+      $scope.listening = true;
+    }
+    else {
+      $scope.listening = false;
+    }
     console.log('recognition stopped');
     window.onkeyup = function(event) {
       $scope.options.animationSteps = 4;
       if($scope.totalCount <= 140 && manualEntry && !event.ctrlKey && event.key && event.key.length === 1) {
-        $scope.listening = true;
         $scope.$apply(function() {
           if($scope.finalTranscript) {
             $scope.finalTranscript += event.key;
