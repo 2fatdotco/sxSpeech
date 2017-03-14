@@ -34,7 +34,7 @@ angular.module('sxspeech', dependencies)
 
   // Configure all charts
   ChartJsProvider.setOptions({
-    colours: ['#ff6900', '#3b3b3b']
+    colours: ['#ff00e0', '#3b3b3b']
   });
 
   // Configure all doughnut charts
